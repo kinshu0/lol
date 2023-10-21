@@ -1,27 +1,29 @@
 import { IconClearAll, IconSettings } from '@tabler/icons-react';
-import { MutableRefObject, memo, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import {
+  MutableRefObject,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import toast from 'react-hot-toast';
-
-
 
 import { useTranslation } from 'next-i18next';
 
-
-
 import { getEndpoint } from '@/utils/app/api';
-import { saveConversation, saveConversations, updateConversation } from '@/utils/app/conversation';
+import {
+  saveConversation,
+  saveConversations,
+  updateConversation,
+} from '@/utils/app/conversation';
 import { throttle } from '@/utils/data/throttle';
-
-
 
 import { ChatBody, Conversation, Message } from '@/types/chat';
 import { Plugin } from '@/types/plugin';
 
-
-
 import HomeContext from '@/pages/api/home/home.context';
-
-
 
 import Spinner from '../Spinner';
 import { ChatInput } from './ChatInput';
@@ -31,7 +33,6 @@ import { MemoizedChatMessage } from './MemoizedChatMessage';
 import { ModelSelect } from './ModelSelect';
 import { SystemPrompt } from './SystemPrompt';
 import { TemperatureSlider } from './Temperature';
-
 
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
@@ -100,9 +101,9 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
         };
         const endpoint = getEndpoint(plugin);
         let body = JSON.stringify(chatBody);
-  
+
         const controller = new AbortController();
-        console.log(".fsdaf")
+        console.log('.fsdaf');
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
@@ -276,7 +277,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
   }, [messagesEndRef]);
 
   return (
-    <div className="relative flex-1 overflow-hidden bg-white dark:bg-[#343541]">
+    <div className="relative flex-1 overflow-hidden bg-white dark:bg-[#282828]">
       {!(apiKey || serverSideApiKeyIsSet) ? (
         <div className="mx-auto flex h-full w-[300px] flex-col justify-center space-y-6 sm:w-[600px]">
           <div className="text-center text-4xl font-bold text-black dark:text-white">
@@ -340,7 +341,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               </>
             ) : (
               <>
-                <div className="sticky top-0 z-10 flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
+                <div className="sticky top-0 z-10 flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#3f3f3f] dark:text-neutral-200">
                   <p>Hello</p>
                 </div>
 
@@ -363,7 +364,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                 {loading && <ChatLoader />}
 
                 <div
-                  className="h-[162px] bg-white dark:bg-[#343541]"
+                  className="h-[162px] bg-white dark:bg-[#282828]"
                   ref={messagesEndRef}
                 />
               </>
