@@ -74,7 +74,7 @@ const Home = ({
     },
     dispatch,
   } = contextValue;
-
+  console.log(conversations);
   const stopConversationRef = useRef<boolean>(false);
 
   const { data, error, refetch } = useQuery(

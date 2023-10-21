@@ -1,83 +1,36 @@
-import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
-import { OpenAIError, OpenAIStream } from '@/utils/server';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 
+// Assuming you're in an environment where `Request` and `Response` are global objects.
+// This is typical in environments like Cloudflare Workers.
 
-import { ChatBody, Message } from '@/types/chat';
-
-
-
-// @ts-expect-error
-import wasm from '../../node_modules/@dqbd/tiktoken/lite/tiktoken_bg.wasm?module';
-
-
-
-import tiktokenModel from '@dqbd/tiktoken/encoders/cl100k_base.json';
-import { Tiktoken, init } from '@dqbd/tiktoken/lite/init';
-
-
-export const config = {
-  runtime: 'edge',
-};
-
-const handler = async (req: Request): Promise<Response> => {
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+) => {
   try {
-    const { model, messages, key, prompt, temperature } =
-      (await req.json()) as ChatBody;
-
-    await init((imports) => WebAssembly.instantiate(wasm, imports));
-    const encoding = new Tiktoken(
-      tiktokenModel.bpe_ranks,
-      tiktokenModel.special_tokens,
-      tiktokenModel.pat_str,
-    );
-
-    let promptToSend = prompt;
-    if (!promptToSend) {
-      promptToSend = DEFAULT_SYSTEM_PROMPT;
+    console.log('hi');
+    // Check if it's a POST request
+    if (req.method !== 'POST') {
+      // Here you're constructing a response for methods that are not POST
+      return new Response(null, {
+        status: 405,
+        statusText: 'Method Not Allowed',
+        headers: { Allow: 'POST' },
+      });
     }
-
-    let temperatureToUse = temperature;
-    if (temperatureToUse == null) {
-      temperatureToUse = DEFAULT_TEMPERATURE;
-    }
-
-    const prompt_tokens = encoding.encode(promptToSend);
-
-    let tokenCount = prompt_tokens.length;
-    let messagesToSend: Message[] = [];
-
-    for (let i = messages.length - 1; i >= 0; i--) {
-      const message = messages[i];
-      const tokens = encoding.encode(message.content);
-
-      if (tokenCount + tokens.length + 1000 > model.tokenLimit) {
-        break;
-      }
-      tokenCount += tokens.length;
-      messagesToSend = [message, ...messagesToSend];
-    }
-
-    encoding.free();
-
-    const stream = await OpenAIStream(
-      model,
-      promptToSend,
-      temperatureToUse,
-      key,
-      messagesToSend,
-    );
-    
-    return new Response(stream);
+    console.log('hi');
+    // Constructing the body of the response object
+    const responseBody = { message: 'hello world' };
+    console.log('bleh');
+    console.log(JSON.stringify(responseBody));
+    // Respond with a static message
+    res.status(200).json({ message: 'hello world' });
   } catch (error) {
     console.error(error);
-    if (error instanceof OpenAIError) {
-      return new Response('Error', { status: 500, statusText: error.message });
-    } else {
-      return new Response('Error', { status: 500 });
-    }
+    // Return a 500 Error response if there is an error.
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 export default handler;
-
