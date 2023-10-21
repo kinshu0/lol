@@ -56,13 +56,14 @@ const Home = ({
   const { getModels } = useApiService();
   const { getModelsError } = useErrorService();
   const [initialRender, setInitialRender] = useState<boolean>(true);
-
+  const [qrCode, setQrCode] = useState<string>('');
   const contextValue = useCreateReducer<HomeInitialState>({
     initialState,
   });
 
   const {
     state: {
+      loggedIn,
       apiKey,
       lightMode,
       folders,
@@ -249,7 +250,6 @@ const Home = ({
   }, [defaultModelId, serverSideApiKeyIsSet, serverSidePluginKeysSet]);
 
   // ON LOAD --------------------------------------------
-
   useEffect(() => {
     const settings = getSettings();
     if (settings.theme) {
@@ -368,6 +368,7 @@ const Home = ({
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       {selectedConversation && (
         <main
           className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
@@ -385,7 +386,6 @@ const Home = ({
             <div className="flex flex-1">
               <Chat stopConversationRef={stopConversationRef} />
             </div>
-
           </div>
         </main>
       )}

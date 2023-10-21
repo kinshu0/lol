@@ -5,7 +5,9 @@ import { OpenAIModel, OpenAIModelID } from '@/types/openai';
 import { PluginKey } from '@/types/plugin';
 import { Prompt } from '@/types/prompt';
 
+
 export interface HomeInitialState {
+  loggedIn: boolean;
   apiKey: string;
   pluginKeys: PluginKey[];
   loading: boolean;
@@ -30,6 +32,7 @@ export interface HomeInitialState {
 }
 
 export const initialState: HomeInitialState = {
+  loggedIn: false,
   apiKey: '',
   loading: false,
   pluginKeys: [],
