@@ -30,12 +30,12 @@ export const OpenAIStream = async (
   key: string,
   messages: Message[],
 ) => {
+  console.log(process.env.OPENAI_API_KEY)
   let url = `${OPENAI_API_HOST}/v1/chat/completions`;
   if (OPENAI_API_TYPE === 'azure') {
     url = `${OPENAI_API_HOST}/openai/deployments/${AZURE_DEPLOYMENT_ID}/chat/completions?api-version=${OPENAI_API_VERSION}`;
   }
-  const res = await fetch(url, {
-    headers: {
+  const headers = {
       'Content-Type': 'application/json',
       ...(OPENAI_API_TYPE === 'openai' && {
         Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`
@@ -46,7 +46,11 @@ export const OpenAIStream = async (
       ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
         'OpenAI-Organization': OPENAI_ORGANIZATION,
       }),
-    },
+    }
+
+  console.log(headers)
+  const res = await fetch(url, {
+    headers: headers,
     method: 'POST',
     body: JSON.stringify({
       ...(OPENAI_API_TYPE === 'openai' && {model: model.id}),
