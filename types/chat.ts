@@ -1,8 +1,11 @@
+import { TextSources } from '@/pages/api/chat';
 import { OpenAIModel } from './openai';
+
 
 export interface Message {
   role: Role;
   content: string;
+  texts?: TextSources[];
 }
 
 export type Role = 'assistant' | 'user';

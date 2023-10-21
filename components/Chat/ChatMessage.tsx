@@ -1,27 +1,33 @@
-import {
-  IconCheck,
-  IconCopy,
-  IconEdit,
-  IconRobot,
-  IconTrash,
-  IconUser,
-} from '@tabler/icons-react';
+import { IconCheck, IconCopy, IconEdit, IconRobot, IconTrash, IconUser } from '@tabler/icons-react';
 import { FC, memo, useContext, useEffect, useRef, useState } from 'react';
+
+
 
 import { useTranslation } from 'next-i18next';
 
+
+
 import { updateConversation } from '@/utils/app/conversation';
+
+
 
 import { Message } from '@/types/chat';
 
+
+
 import HomeContext from '@/pages/api/home/home.context';
+
+
 
 import { CodeBlock } from '../Markdown/CodeBlock';
 import { MemoizedReactMarkdown } from '../Markdown/MemoizedReactMarkdown';
 
+
+
 import rehypeMathjax from 'rehype-mathjax';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+
 
 export interface Props {
   message: Message;
@@ -130,7 +136,9 @@ export const ChatMessage: FC<Props> = memo(
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
       }
     }, [isEditing]);
-
+    
+    console.log(message.texts);
+    
     return (
       <div
         className={`group md:px-4 ${
@@ -193,7 +201,7 @@ export const ChatMessage: FC<Props> = memo(
                   </div>
                 ) : (
                   <div className="prose whitespace-pre-wrap dark:prose-invert flex-1">
-                    {message.content}
+                    <p>{message.content}</p>
                   </div>
                 )}
 
@@ -275,7 +283,9 @@ export const ChatMessage: FC<Props> = memo(
                     },
                   }}
                 >
-                  {`${message.content}${
+                  {`${
+                    message.content
+                  }${
                     messageIsStreaming &&
                     messageIndex ==
                       (selectedConversation?.messages.length ?? 0) - 1
@@ -283,6 +293,12 @@ export const ChatMessage: FC<Props> = memo(
                       : ''
                   }`}
                 </MemoizedReactMarkdown>
+                {message.content && message.texts &&
+                <p className='text-blue-500 cursor-pointer' onClick={() => console.log()}>
+                  View Source
+                </p>
+                }
+                
 
                 <div className="md:-mr-8 ml-1 md:ml-0 flex flex-col md:flex-row gap-4 md:gap-1 items-center md:items-start justify-end md:justify-start">
                   {messagedCopied ? (

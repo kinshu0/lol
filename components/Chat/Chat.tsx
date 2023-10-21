@@ -103,7 +103,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
         let body = JSON.stringify(chatBody);
 
         const controller = new AbortController();
-        console.log('.fsdaf');
+
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
@@ -128,9 +128,11 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
           homeDispatch({ field: 'messageIsStreaming', value: false });
           return;
         }
+        
 
         // Process the server's response message (e.g., "hello world")
         const serverMessage = data.message; // "hello world"
+        const texts = data.texts;
 
         // If you need to handle the first message specifically or modify the conversation based on it, you can do so here.
         if (updatedConversation.messages.length === 1) {
@@ -143,6 +145,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
         const newAssistantMessage: Message = {
           role: 'assistant',
           content: serverMessage,
+          texts,
         }; // creating a new message object
         const updatedMessages: Message[] = [
           ...updatedConversation.messages,
@@ -344,7 +347,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                 <div className="sticky top-0 z-10 flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#3f3f3f] dark:text-neutral-200">
                   <p>Hello</p>
                 </div>
-
+                {console.log(selectedConversation?.messages)}
                 {selectedConversation?.messages.map((message, index) => (
                   <MemoizedChatMessage
                     key={index}
