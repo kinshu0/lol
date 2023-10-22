@@ -1,0 +1,55 @@
+{
+    "response": "Your most recent message is not provided in the context you provided. Could you please provide more information about your most recent message or specify the timeframe?",
+    "texts": [
+        {
+            "text": "Happy Birthday! Hope your day is as amazing as you are!",
+            "user": "JohnDoe",
+            "timestamp": 1671619200
+        },
+        {
+            "text": "Wishing you all the happiness on your special day! \ud83c\udf89",
+            "user": "JaneDoe",
+            "timestamp": 1671622800
+        },
+        {
+            "text": "HBD! Can't wait to celebrate with you tonight!",
+            "user": "Mike_Smith",
+            "timestamp": 1671626400
+        },
+        {
+            "text": "Haha, I still hate you",
+            "user": "SarahP",
+            "timestamp": 1671630000
+        },
+        {
+            "text": "Happy Birthday! Let's make this year the best one yet!",
+            "user": "Tom_Jones",
+            "timestamp": 1671633600
+        },
+        {
+            "text": "Another year older, wiser, and even more awesome. Happy Birthday!",
+            "user": "JenniferM",
+            "timestamp": 1671637200
+        },
+        {
+            "text": "Hope your birthday is just the beginning of a year full of happiness!",
+            "user": "AlexW",
+            "timestamp": 1671640800
+        },
+        {
+            "text": "Have a wonderful birthday, my dear! You deserve all the joy in the world \ud83c\udf88",
+            "user": "ChrisF",
+            "timestamp": 1671644400
+        },
+        {
+            "text": "Happy Birthday! \ud83c\udf81 Enjoy this day to the fullest!",
+            "user": "PatriciaH",
+            "timestamp": 1671648000
+        },
+        {
+            "text": "Worst wishes on your birthday! I hate you still!",
+            "user": "Bill_S",
+            "timestamp": 1671651600
+        }
+    ]
+}

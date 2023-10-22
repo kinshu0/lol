@@ -16,65 +16,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
     // Constructing the body of the response object
-    //make a collection of 10 sample texts
-    const sampleTexts: TextSources[] = [
-      {
-        text: 'Happy Birthday! Hope your day is as amazing as you are!',
-        user: 'JohnDoe',
-        timestamp: 1671619200, // example timestamp
-      },
-      {
-        text: 'Wishing you all the happiness on your special day! 🎉',
-        user: 'JaneDoe',
-        timestamp: 1671622800, // example timestamp
-      },
-      {
-        text: "HBD! Can't wait to celebrate with you tonight!",
-        user: 'Mike_Smith',
-        timestamp: 1671626400, // example timestamp
-      },
-      {
-        text: '🎂 Sending you a big birthday hug! Have a great one!',
-        user: 'SarahP',
-        timestamp: 1671630000, // example timestamp
-      },
-      {
-        text: "Happy Birthday! Let's make this year the best one yet!",
-        user: 'Tom_Jones',
-        timestamp: 1671633600, // example timestamp
-      },
-      {
-        text: 'Another year older, wiser, and even more awesome. Happy Birthday!',
-        user: 'JenniferM',
-        timestamp: 1671637200, // example timestamp
-      },
-      {
-        text: 'Hope your birthday is just the beginning of a year full of happiness!',
-        user: 'AlexW',
-        timestamp: 1671640800, // example timestamp
-      },
-      {
-        text: 'Have a wonderful birthday, my dear! You deserve all the joy in the world 🎈',
-        user: 'ChrisF',
-        timestamp: 1671644400, // example timestamp
-      },
-      {
-        text: 'Happy Birthday! 🎁 Enjoy this day to the fullest!',
-        user: 'PatriciaH',
-        timestamp: 1671648000, // example timestamp
-      },
-      {
-        text: 'Best wishes on your birthday! May you have many, many more!',
-        user: 'Bill_S',
-        timestamp: 1671651600, // example timestamp
-      },
-    ];
+    
+    
 
-    const responseBody = {
-      message:
-        'hello worldhello worldhello worldhello worldhello worldhell',
-      texts: sampleTexts,
-    };
+    const responseBody = await getResponseBody()
 
     // Respond with a static message
     res.status(200).json(responseBody);
@@ -84,6 +29,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+const FLASK_API_URL = "http://localhost:5000" as const
+async function getResponseBody(): Promise<{ message: string; texts: TextSources[] }> {
+  const prompt = "who hates me"
+  const apiUrl = encodeURI(`${FLASK_API_URL}/get?msg=${prompt}`)
+  console.log("---request url", apiUrl)
+  
+  
+  const res0 = await fetch(apiUrl)
+  console.log("---FLASK RESPONSE", res0)
+  const res = await res0.json()
+
+  return {
+    message: res.response,
+    texts: res.texts,
+  };
+}
+
 
 export default handler;
 
