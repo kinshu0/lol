@@ -1,5 +1,7 @@
 import { QRCodeCanvas } from 'qrcode.react';
 import { useEffect, useRef, useState } from 'react';
+import { AiOutlineMessage } from 'react-icons/ai';
+import { FaDiscord, FaSms, FaTelegramPlane, FaWhatsapp } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 
 import { GetServerSideProps } from 'next';
@@ -456,6 +458,7 @@ const CenteredQRCode: React.FC<CenteredQRCodeProps> = ({
   setHasQrCode,
   onButtonClick,
 }) => {
+  const [view, setView] = useState<string>('menu');
   // Inline styles for your colors
   const primaryColor = '#282828';
   const secondaryColor = '#121212';
@@ -483,48 +486,97 @@ const CenteredQRCode: React.FC<CenteredQRCodeProps> = ({
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <div className="p-8 bg-white shadow-lg rounded-lg">
-        {/* QR Code display */}
-        <div className="mb-4 flex justify-center">
-          <p>Connect to your Whatsapp</p>
+    <>
+      {view !== 'menu' ? (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-[#3f3f3f]">
+          <div className="p-8 bg-white shadow-lg rounded-lg">
+            {/* QR Code display */}
+            <div className="mb-4 flex justify-center">
+              <p className='text-lg'>Connect to your Whatsapp</p>
+            </div>
+            <div className="mb-4 flex justify-center">
+              {!qrValue ? (
+                <div style={{ width: 256, height: 256 }} className="relative">
+                  {/* Loading indicator */}
+                  <div className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+                    {/* This is a simple spinning loader. You can replace it with any other loading indicator or a custom one. */}
+                  </div>
+                </div>
+              ) : (
+                <QRCodeCanvas value={qrValue} size={256} />
+              )}
+            </div>
+
+            {/* Button with inline styles for background color, hover effect, and focus ring */}
+            <div className="mt-4 flex justify-center">
+              <button
+                style={{
+                  backgroundColor: primaryColor,
+                  borderColor: accentColor, // If you want a border, otherwise remove this line
+                }}
+                className="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.backgroundColor = secondaryColor)
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.backgroundColor = primaryColor)
+                }
+                onClick={() => {
+                  setHasQrCode(true);
+                }}
+              >
+                Connected? Click Here
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="mb-4 flex justify-center">
-          {!qrValue ? (
-            <div style={{ width: 256, height: 256 }} className="relative">
-              {/* Loading indicator */}
-              <div className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
-                {/* This is a simple spinning loader. You can replace it with any other loading indicator or a custom one. */}
+      ) : (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-[#3f3f3f]">
+          <div className="p-8 bg-white shadow-lg rounded-lg">
+            <div className="flex flex-col space-y-4">
+              <h1 className='text-lg'>Connect Your Chats</h1>
+              <div className="flex items-center space-x-4">
+                <FaWhatsapp size={32} />
+                <button
+                  className="text-base font-medium"
+                  onClick={() => setView('whatsapp')}
+                >
+                  WhatsApp
+                </button>
+              </div>
+              <div className="flex items-center space-x-4 opacity-50 cursor-not-allowed">
+                <AiOutlineMessage size={32} />
+                <p className="text-base font-medium">iMessage</p>
+                <span className="ml-2 px-2 py-1 text-xs text-gray-600 bg-gray-200 rounded">
+                  Coming Soon
+                </span>
+              </div>
+              <div className="flex items-center space-x-4 opacity-50 cursor-not-allowed">
+                <FaSms size={32} />
+                <p className="text-base font-medium">SMS</p>
+                <span className="ml-2 px-2 py-1 text-xs text-gray-600 bg-gray-200 rounded">
+                  Coming Soon
+                </span>
+              </div>
+              <div className="flex items-center space-x-4 opacity-50 cursor-not-allowed">
+                <FaTelegramPlane size={32} />
+                <p className="text-base font-medium">Telegram</p>
+                <span className="ml-2 px-2 py-1 text-xs text-gray-600 bg-gray-200 rounded">
+                  Coming Soon
+                </span>
+              </div>
+              <div className="flex items-center space-x-4 opacity-50 cursor-not-allowed">
+                <FaDiscord size={32} />
+                <p className="text-base font-medium">Discord</p>
+                <span className="ml-2 px-2 py-1 text-xs text-gray-600 bg-gray-200 rounded">
+                  Coming Soon
+                </span>
               </div>
             </div>
-          ) : (
-            <QRCodeCanvas value={qrValue} size={256} />
-          )}
+          </div>
         </div>
-
-        {/* Button with inline styles for background color, hover effect, and focus ring */}
-        <div className="mt-4 flex justify-center">
-          <button
-            style={{
-              backgroundColor: primaryColor,
-              borderColor: accentColor, // If you want a border, otherwise remove this line
-            }}
-            className="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor = secondaryColor)
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.backgroundColor = primaryColor)
-            }
-            onClick={() => {
-              setHasQrCode(true);
-            }}
-          >
-            Connected? Click Here
-          </button>
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
