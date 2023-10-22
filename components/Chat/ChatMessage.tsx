@@ -27,6 +27,7 @@ import { MemoizedReactMarkdown } from '../Markdown/MemoizedReactMarkdown';
 import rehypeMathjax from 'rehype-mathjax';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import { SourceModal } from './SourceModal';
 
 
 export interface Props {
@@ -294,9 +295,7 @@ export const ChatMessage: FC<Props> = memo(
                   }`}
                 </MemoizedReactMarkdown>
                 {message.content && message.texts &&
-                <p className='text-blue-500 cursor-pointer' onClick={() => console.log()}>
-                  View Source
-                </p>
+                  <SourceModal message={message} />
                 }
                 
 
