@@ -34,7 +34,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const FLASK_API_URL = "http://localhost:5000" as const
+const FLASK_API_URL = 'http://127.0.0.1:5000' as const;
 async function getResponseBody(prompt:string): Promise<{ message: string; texts: TextSources[] }> {
   // const prompt = "who hates me"
 
@@ -45,7 +45,6 @@ async function getResponseBody(prompt:string): Promise<{ message: string; texts:
   const res0 = await fetch(apiUrl)
   console.log("---FLASK RESPONSE", res0)
   const res = await res0.json()
-
   return {
     message: res.response,
     texts: res.texts,
