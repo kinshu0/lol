@@ -1,29 +1,33 @@
+import { QRCodeCanvas } from 'qrcode.react';
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
+
+
 
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 
+
+
 import { useCreateReducer } from '@/hooks/useCreateReducer';
+
+
 
 import useErrorService from '@/services/errorService';
 import useApiService from '@/services/useApiService';
 
-import {
-  cleanConversationHistory,
-  cleanSelectedConversation,
-} from '@/utils/app/clean';
+
+
+import { cleanConversationHistory, cleanSelectedConversation } from '@/utils/app/clean';
 import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
-import {
-  saveConversation,
-  saveConversations,
-  updateConversation,
-} from '@/utils/app/conversation';
+import { saveConversation, saveConversations, updateConversation } from '@/utils/app/conversation';
 import { saveFolders } from '@/utils/app/folders';
 import { savePrompts } from '@/utils/app/prompts';
 import { getSettings } from '@/utils/app/settings';
+
+
 
 import { Conversation } from '@/types/chat';
 import { KeyValuePair } from '@/types/data';
@@ -31,15 +35,22 @@ import { FolderInterface, FolderType } from '@/types/folder';
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 import { Prompt } from '@/types/prompt';
 
+
+
 import { Chat } from '@/components/Chat/Chat';
 import { Chatbar } from '@/components/Chatbar/Chatbar';
 import { Navbar } from '@/components/Mobile/Navbar';
 import Promptbar from '@/components/Promptbar';
 
+
+
 import HomeContext from './home.context';
 import { HomeInitialState, initialState } from './home.state';
 
+
+
 import { v4 as uuidv4 } from 'uuid';
+
 
 interface Props {
   serverSideApiKeyIsSet: boolean;
@@ -57,6 +68,8 @@ const Home = ({
   const { getModelsError } = useErrorService();
   const [initialRender, setInitialRender] = useState<boolean>(true);
   const [qrCode, setQrCode] = useState<string>('');
+  const [hasQrCode, setHasQrCode] = useState<boolean>(false);
+
   const contextValue = useCreateReducer<HomeInitialState>({
     initialState,
   });
@@ -367,8 +380,11 @@ const Home = ({
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      {selectedConversation && (
+      {
+        !hasQrCode ? 
+          <CenteredQRCode qrValue={qrCode} setQrValue={setQrCode} hasQrCode={hasQrCode} setHasQrCode={setHasQrCode} onButtonClick={() => {}}/> :
+        <>
+          {selectedConversation && (
         <main
           className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
         >
@@ -388,6 +404,8 @@ const Home = ({
           </div>
         </main>
       )}
+        </>
+      }
     </HomeContext.Provider>
   );
 };
@@ -426,4 +444,80 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
       ])),
     },
   };
+};
+
+
+interface CenteredQRCodeProps {
+  qrValue: string;
+  setQrValue: (value: string) => void;
+  hasQrCode: boolean;
+  setHasQrCode: (value: boolean) => void;
+  onButtonClick: () => void;
+}
+const CenteredQRCode: React.FC<CenteredQRCodeProps> = ({ qrValue, setQrValue, hasQrCode, setHasQrCode, onButtonClick }) => {
+  // Inline styles for your colors
+  const primaryColor = '#282828';
+  const secondaryColor = '#121212';
+  const accentColor = '#2e3842';
+
+  useEffect(() => {
+    if (qrValue) return;
+    fetch('http://localhost:9000/test')
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.text(); // Change this line to use .text() instead of .json()
+      })
+      .then((data) => {
+        console.log(data);
+        setQrValue(data);
+      })
+      .catch((error) => {
+        console.error(
+          'There has been a problem with your fetch operation:',
+          error,
+        );
+      });
+  }, []);
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+      <div className="p-8 bg-white shadow-lg rounded-lg">
+        {/* QR Code display */}
+        <div className="mb-4 flex justify-center">
+          <p>Connect to your Whatsapp</p>
+        </div>
+        <div className="mb-4 flex justify-center">
+          {!qrValue ? (
+          <div style={{ width: 256, height: 256 }} className="relative">
+            {/* Loading indicator */}
+            <div className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+              {/* This is a simple spinning loader. You can replace it with any other loading indicator or a custom one. */}
+            </div>
+          </div>
+        ) : (
+          <QRCodeCanvas value={qrValue} size={256} />
+        )}
+          </div>
+
+        {/* Button with inline styles for background color, hover effect, and focus ring */}
+        <div className="mt-4 flex justify-center">
+          <button
+            style={{
+              backgroundColor: primaryColor,
+              borderColor: accentColor, // If you want a border, otherwise remove this line
+            }}
+            className="inline-flex items-center px-4 py-2 border text-base font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = secondaryColor)}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = primaryColor)}
+            onClick={() => {setHasQrCode(true);}}
+          >
+            Connected? Click Here
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
