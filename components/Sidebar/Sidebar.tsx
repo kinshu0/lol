@@ -8,6 +8,7 @@ import {
 } from './components/OpenCloseButton';
 
 import Search from '../Search';
+import { InsightsMenu } from '../InsightsMenu';
 
 interface Props<T> {
   isOpen: boolean;
@@ -83,6 +84,7 @@ const Sidebar = <T,>({
           searchTerm={searchTerm}
           onSearch={handleSearchTerm}
         />
+        <InsightsMenu />
 
         <div className="flex-grow overflow-auto">
           {items?.length > 0 && (
@@ -109,7 +111,7 @@ const Sidebar = <T,>({
               </span>
             </div>
           )}
-        </div>
+        I</div>
         {footerComponent}
       </div>
 

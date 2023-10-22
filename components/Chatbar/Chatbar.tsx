@@ -25,6 +25,7 @@ import ChatbarContext from './Chatbar.context';
 import { ChatbarInitialState, initialState } from './Chatbar.state';
 
 import { v4 as uuidv4 } from 'uuid';
+import { InsightsMenu } from '../InsightsMenu';
 
 export const Chatbar = () => {
   const { t } = useTranslation('sidebar');

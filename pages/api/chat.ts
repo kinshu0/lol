@@ -34,10 +34,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const FLASK_API_URL = 'http://127.0.0.1:5000' as const;
+export const FLASK_API_URL = 'http://127.0.0.1:5000' as const;
 async function getResponseBody(prompt:string): Promise<{ message: string; texts: TextSources[] }> {
   // const prompt = "who hates me"
 
+  
   const apiUrl = encodeURI(`${FLASK_API_URL}/get?msg=${prompt}`)
   console.log("---request url", apiUrl)
   
