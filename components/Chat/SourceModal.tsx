@@ -35,7 +35,7 @@ export const SourceModal: FC<Props> = ({ message }) => {
           <DialogTitle className="text-white"> Sources</DialogTitle>
           <DialogDescription className="text-white">
             <div className="flex flex-col gap-5">
-              {message.texts?.map((sourceMessage, index) => (
+              {message.texts?.slice(-5).map((sourceMessage, index) => (
                 <SourceMessage textMessage={sourceMessage} key={index} />
               ))}
             </div>
