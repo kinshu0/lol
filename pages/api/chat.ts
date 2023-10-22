@@ -18,8 +18,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // Constructing the body of the response object
     
     
-
-    const responseBody = await getResponseBody()
+    // const prompt = req.body.prompt;
+    console.log("----------------------------- req.body", req.body)
+    // const prompt = "who hates me"
+    const prompt = req.body.messages.pop().content;
+    console.log("---------PROMPT", prompt)
+    const responseBody = await getResponseBody(prompt)
 
     // Respond with a static message
     res.status(200).json(responseBody);
@@ -31,8 +35,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 const FLASK_API_URL = "http://localhost:5000" as const
-async function getResponseBody(): Promise<{ message: string; texts: TextSources[] }> {
-  const prompt = "who hates me"
+async function getResponseBody(prompt:string): Promise<{ message: string; texts: TextSources[] }> {
+  // const prompt = "who hates me"
+
   const apiUrl = encodeURI(`${FLASK_API_URL}/get?msg=${prompt}`)
   console.log("---request url", apiUrl)
   
